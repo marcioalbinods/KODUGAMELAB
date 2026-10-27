@@ -50,7 +50,7 @@ docs/                 guias rápidos do professor e do aluno
 
 ### 3.1 Criar o banco no Supabase (≈ 15 min)
 1. Crie uma conta em <https://supabase.com> e um **novo projeto** (região sugerida: *South America (São Paulo)*). Guarde a senha do banco.
-2. Abra **SQL Editor** → *New query* e execute, **nesta ordem**, o conteúdo de cada arquivo de `supabase/migrations/`:
+2. Abra **SQL Editor** → *New query*, cole todo o conteúdo de **`supabase/setup-completo.sql`** e clique em *Run* (ele contém as 4 migrações abaixo, já em ordem). Se preferir, execute cada arquivo de `supabase/migrations/` nesta ordem:
    1. `20261027000001_schema.sql`
    2. `20261027000002_functions.sql`
    3. `20261027000003_security.sql`
