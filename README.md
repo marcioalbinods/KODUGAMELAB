@@ -74,7 +74,7 @@ docs/                 guias rápidos do professor e do aluno
    git push -u origin main
    ```
 2. No GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. **Settings → Secrets and variables → Actions → New repository secret:** crie `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` com os valores do passo 3.1.6.
+3. Coloque a **Project URL** e a chave **publishable/anon** no arquivo `.env.production` (são valores públicos por natureza; a publicação valida o formato e recusa chaves secretas).
 4. **Actions → “Testar e publicar no GitHub Pages” → Run workflow** (ou faça um novo push). O endereço aparece no resumo da execução: `https://SEU-USUARIO.github.io/kodu-academy/`.
 5. Abra o site: o aviso amarelo de “Modo demonstração” **não** deve aparecer. Entre como professor, crie uma turma de teste, cadastre um aluno fictício identificado como teste (ex.: “TESTE – apagar”), entre com o código em outra janela anônima e conclua a fase 1. Depois exclua a turma de teste.
 

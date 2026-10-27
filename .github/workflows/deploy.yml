@@ -46,17 +46,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Validar a configuração do Supabase (sem exibir os valores)
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      - name: Validar a configuração do Supabase (arquivo .env.production)
         run: npx tsx scripts/check-config.ts
       - name: Compilar
-        env:
-          # Configure em Settings > Secrets and variables > Actions.
-          # Sem estes valores, o site é publicado em MODO DEMONSTRAÇÃO.
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        # A configuração pública do Supabase vem do arquivo .env.production.
+        # Sem ela, o site é publicado em MODO DEMONSTRAÇÃO.
         run: npm run build
       - name: Verificar que nenhuma chave secreta foi incluída
         run: node scripts/check-secrets.mjs dist
