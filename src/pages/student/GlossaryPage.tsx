@@ -31,7 +31,7 @@ export function GlossaryPage() {
               </dd>
             </div>
           ) : (
-            <div key={t.id} className="card" style={{ marginBottom: 10, opacity: 0.7 }}>
+            <div key={t.id} className="card" style={{ marginBottom: 10, background: 'var(--surface-2)' }}>
               <dt>🔒 Termo da fase {t.phase}</dt>
               <dd style={{ margin: 0 }} className="small muted">Disponível quando a fase {t.phase} for liberada.</dd>
             </div>

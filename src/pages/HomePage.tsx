@@ -21,7 +21,7 @@ export function HomePage() {
           <div className="row">
             {student ? (
               <Link className="btn btn-secondary" to={resume ? `/fase/${resume}` : '/trilha'}>
-                {resume ? `Continuar na fase ${resume}` : 'Ver minha trilha'}
+                {resume ? `${progress[resume] ? 'Continuar' : 'Começar'} a fase ${resume}` : 'Ver minha trilha'}
               </Link>
             ) : (
               <Link className="btn btn-secondary" to="/aluno/entrar">

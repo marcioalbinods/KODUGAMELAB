@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './Logo';
 import { useApp } from '../state/AppContext';
@@ -14,8 +14,14 @@ export function Layout({ children }: { children: ReactNode }) {
     setOpen(false);
     window.scrollTo(0, 0);
   }, [loc.pathname]);
-  // Move o foco para o conteúdo principal ao trocar de página (leitores de tela)
+  // Move o foco para o conteúdo principal ao trocar de página (leitores de tela),
+  // exceto no primeiro carregamento, para o "Pular para o conteúdo" ser o primeiro Tab.
+  const first = useRef(true);
   useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
     document.getElementById('conteudo')?.focus({ preventScroll: true });
   }, [loc.pathname]);
 
@@ -25,7 +31,7 @@ export function Layout({ children }: { children: ReactNode }) {
         Pular para o conteúdo
       </a>
       {backend?.mode === 'demo' && (
-        <div className="banner banner-demo" role="note">
+        <aside className="banner banner-demo" aria-label="Aviso do modo demonstração">
           <div className="container">
             <strong>Modo demonstração.</strong>
             <span>
@@ -33,16 +39,16 @@ export function Layout({ children }: { children: ReactNode }) {
               configurar o banco de dados (veja <Link to="/como-usar#professor">Como usar</Link>).
             </span>
           </div>
-        </div>
+        </aside>
       )}
       {!online && (
-        <div className="banner banner-offline" role="alert">
+        <aside className="banner banner-offline" role="alert">
           <div className="container">Sem conexão com a internet. O que você fizer agora pode não ser salvo — aguarde a conexão voltar.</div>
-        </div>
+        </aside>
       )}
       <header className="site-header">
         <div className="container">
-          <Link to="/" className="brand" aria-label="Kodu Academy — página inicial">
+          <Link to="/" className="brand">
             <Logo />
             <span>
               Kodu Academy

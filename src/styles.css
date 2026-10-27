@@ -17,7 +17,7 @@
   --danger-soft: #fde7e5;
   --ok: #1f7a3a;
   --ok-soft: #e1f5e6;
-  --locked: #8a94a6;
+  --locked: #556072;
   --mod-1: #2563eb;
   --mod-2: #7c3aed;
   --mod-3: #047857;
@@ -110,9 +110,9 @@ main { padding: 24px 0 64px; min-height: 70vh; }
 }
 .nav a[aria-current='page'] { background: var(--primary-soft); color: var(--primary); }
 .nav a:hover { background: var(--surface-2); }
-.menu-toggle { display: none; }
+.btn.menu-toggle { display: none; }
 @media (max-width: 760px) {
-  .menu-toggle { display: inline-flex; margin-left: auto; }
+  .btn.menu-toggle { display: inline-flex; margin-left: auto; }
   .nav { display: none; width: 100%; flex-direction: column; align-items: stretch; padding-bottom: 12px; }
   .nav.open { display: flex; }
 }
@@ -243,7 +243,7 @@ dialog::backdrop { background: rgb(10 15 30 / 55%); }
 a.phase-card:hover { border-color: var(--primary); }
 .phase-card .num { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; }
 .phase-card h3 { margin: 0; font-size: 1.05rem; }
-.phase-card.locked { background: var(--surface-2); color: var(--muted); border-style: dashed; }
+.phase-card.locked { background: var(--surface-2); color: var(--text); border-style: dashed; }
 .phase-card.completed { border-color: var(--ok); }
 .phase-card .state { margin-top: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
