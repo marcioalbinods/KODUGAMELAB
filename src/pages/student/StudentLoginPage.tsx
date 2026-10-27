@@ -11,6 +11,7 @@ export function formatCode(raw: string): string {
 
 export function StudentLoginPage() {
   const { backend, student, setStudent, reloadProgress, studentLoading, teacher } = useApp();
+  const { bootError } = useApp();
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -72,7 +73,7 @@ export function StudentLoginPage() {
             </div>
           </div>
           <div id="codigo-erro">
-            <ErrorAlert message={error} />
+            <ErrorAlert message={error ?? bootError} />
           </div>
           <button className="btn btn-block" type="submit" disabled={busy || !backend}>
             {busy ? 'Entrando...' : 'Entrar'}

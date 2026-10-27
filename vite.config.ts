@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react';
 // Assim, o gabarito dos testes só entra no pacote publicado no modo demonstração.
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
-  const hasSupabase = Boolean(env.VITE_SUPABASE_URL && env.VITE_SUPABASE_ANON_KEY);
+  const hasSupabase = Boolean(env.VITE_SUPABASE_URL?.trim() && env.VITE_SUPABASE_ANON_KEY?.trim());
   const isTest = mode === 'test';
   return {
     base: env.VITE_BASE_PATH || './',

@@ -1,4 +1,5 @@
-import type { Backend } from './types';
+import { AppError, type Backend } from './types';
+import { normalizeSupabaseUrl, supabaseConfigProblems } from './supabaseConfig';
 
 let instance: Promise<Backend> | null = null;
 
@@ -14,8 +15,14 @@ export function getBackend(): Promise<Backend> {
         const m = await import('./demoBackend');
         return m.createDemoBackend();
       }
+      const url = import.meta.env.VITE_SUPABASE_URL;
+      const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const problems = supabaseConfigProblems(url, key);
+      if (problems.length) {
+        throw new AppError('Configuração do servidor incorreta. Avise o professor. Detalhe técnico: ' + problems.join(' '), 'config');
+      }
       const m = await import('./supabaseBackend');
-      return m.createSupabaseBackend(import.meta.env.VITE_SUPABASE_URL!, import.meta.env.VITE_SUPABASE_ANON_KEY!);
+      return m.createSupabaseBackend(normalizeSupabaseUrl(url), key!.trim());
     })();
   }
   return instance;

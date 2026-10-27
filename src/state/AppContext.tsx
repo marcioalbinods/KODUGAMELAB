@@ -50,7 +50,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         if (t.status === 'fulfilled') setTeacher(t.value);
         if (s.status === 'rejected' && t.status === 'rejected') setBootError(toAppError(s.reason).message);
       })
-      .catch((e) => alive && setBootError(toAppError(e).message))
+      .catch((e) => alive && setBootError(e instanceof Error && e.name === 'AppError' ? e.message : toAppError(e).message))
       .finally(() => {
         if (alive) {
           setStudentLoading(false);

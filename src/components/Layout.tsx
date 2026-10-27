@@ -5,7 +5,7 @@ import { useApp } from '../state/AppContext';
 import { useOnline } from '../lib/useOnline';
 
 export function Layout({ children }: { children: ReactNode }) {
-  const { backend, student, teacher, logoutStudent, logoutTeacher } = useApp();
+  const { backend, bootError, student, teacher, logoutStudent, logoutTeacher } = useApp();
   const [open, setOpen] = useState(false);
   const loc = useLocation();
   const nav = useNavigate();
@@ -38,6 +38,14 @@ export function Layout({ children }: { children: ReactNode }) {
               Os dados ficam só neste navegador e não são compartilhados com o professor. Para uso real em sala, o professor precisa
               configurar o banco de dados (veja <Link to="/como-usar#professor">Como usar</Link>).
             </span>
+          </div>
+        </aside>
+      )}
+      {bootError && (
+        <aside className="banner banner-offline" role="alert">
+          <div className="container">
+            <strong>Não foi possível conectar ao servidor.</strong> <span>{bootError}</span>
+            <button type="button" className="btn btn-sm btn-ghost" onClick={() => window.location.reload()}>Tentar de novo</button>
           </div>
         </aside>
       )}

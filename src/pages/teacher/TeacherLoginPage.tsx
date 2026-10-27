@@ -6,6 +6,7 @@ import { toAppError } from '../../services/errors';
 
 export function TeacherLoginPage() {
   const { backend, teacher, setTeacher, teacherLoading, student } = useApp();
+  const { bootError } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -60,7 +61,7 @@ export function TeacherLoginPage() {
               aria-invalid={Boolean(fieldErrors.password)} aria-describedby={fieldErrors.password ? 'senha-erro' : undefined} />
             {fieldErrors.password && <div id="senha-erro" className="hint-text" style={{ color: 'var(--danger)' }}>{fieldErrors.password}</div>}
           </div>
-          <ErrorAlert message={error} />
+          <ErrorAlert message={error ?? bootError} />
           <button className="btn btn-block" type="submit" disabled={busy || !backend}>
             {busy ? 'Entrando…' : 'Entrar'}
           </button>
