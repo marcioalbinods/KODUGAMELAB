@@ -54,8 +54,12 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
       - name: Verificar que nenhuma chave secreta foi incluída
+        run: node scripts/check-secrets.mjs dist
+      - name: Informar o modo do site
+        env:
+          HAS_URL: ${{ secrets.VITE_SUPABASE_URL != '' }}
         run: |
-          if grep -rIl "service_role\|sb_secret_" dist; then echo "Chave secreta encontrada no build!"; exit 1; fi
+          if [ "$HAS_URL" = "true" ]; then echo "Site conectado ao Supabase (modo real)."; else echo "::warning::Secrets do Supabase ausentes: site publicado em MODO DEMONSTRAÇÃO."; fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
