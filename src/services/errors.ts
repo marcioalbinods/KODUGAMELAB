@@ -22,6 +22,8 @@ const MESSAGES: Record<string, string> = {
   not_teacher_account: 'Esta conta não tem acesso de professor. Peça ao administrador para liberar o acesso.',
   anonymous_disabled:
     'O acesso de alunos ainda não foi habilitado no servidor (login anônimo desativado no Supabase). Avise o professor.',
+  email_not_confirmed:
+    'Este e-mail ainda não foi confirmado no Supabase. Em Authentication → Users, confirme o usuário (ou recrie marcando "Auto Confirm User").',
   network: 'Sem conexão com o servidor. Verifique a internet e tente de novo — nada do que você já salvou foi perdido.',
   duplicate_class: 'Já existe uma turma com esse nome.',
 };
@@ -37,6 +39,7 @@ export function toAppError(err: unknown): AppError {
   const msg = e?.message ?? String(err);
   if (/Failed to fetch|NetworkError|network|fetch failed|Load failed/i.test(msg)) return new AppError(messageFor('network'), 'network');
   if (/Invalid login credentials/i.test(msg)) return new AppError(messageFor('invalid_credentials'), 'invalid_credentials');
+  if (/Email not confirmed/i.test(msg)) return new AppError(messageFor('email_not_confirmed'), 'email_not_confirmed');
   if (/Anonymous sign-ins are disabled/i.test(msg)) return new AppError(messageFor('anonymous_disabled'), 'anonymous_disabled');
   if (e?.code === '23505') return new AppError(messageFor('duplicate_class'), 'duplicate_class');
   for (const code of Object.keys(MESSAGES)) {
