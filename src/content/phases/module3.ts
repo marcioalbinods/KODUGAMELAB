@@ -1,5 +1,5 @@
 import type { Phase } from '../types';
-import { T, text, points } from '../tiles';
+import { T, points } from '../tiles';
 
 export const module3: Phase[] = [
   {

@@ -122,8 +122,8 @@ export const T = {
   pts10: modifier('10 points', '10 pontos'),
   pts20: modifier('20 points', '20 pontos'),
   pts50: modifier('50 points', '50 pontos'),
-  apple: modifier('apple', 'maçã'),
-  coin: modifier('coin', 'moeda'),
+  mApple: modifier('apple', 'maçã'),
+  mCoin: modifier('coin', 'moeda'),
 };
 
 /** Texto digitado em uma ação "say" (aparece no Kodu como um bloco com o texto). */

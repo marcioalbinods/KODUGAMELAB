@@ -103,9 +103,13 @@ export interface Phase {
   reflection: { prompt: string; guide: string };
   /** Termos do glossário apresentados nesta fase (ids de glossary.ts). */
   glossary: string[];
+  /** Diagramas ilustrativos exibidos na seção de conceito. */
+  diagrams?: DiagramId[];
   /** Observações sobre diferenças entre versões do Kodu. */
   versionNotes?: string[];
 }
+
+export type DiagramId = 'toolbar' | 'mouse' | 'rule-anatomy' | 'states' | 'debug' | 'iteration' | 'counter';
 
 export interface Module {
   id: 1 | 2 | 3 | 4 | 5;

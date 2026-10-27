@@ -4,6 +4,7 @@ import { T, ALWAYS, text, points } from '../tiles';
 export const module4: Phase[] = [
   {
     id: 13,
+    diagrams: ['states'],
     module: 4,
     title: 'Múltiplas regras: regras recuadas e páginas',
     difficulty: 'intermediario',
@@ -192,6 +193,7 @@ export const module4: Phase[] = [
 
   {
     id: 14,
+    diagrams: ['states'],
     module: 4,
     title: 'Inimigos com comportamento próprio',
     difficulty: 'dificil',
@@ -369,6 +371,7 @@ export const module4: Phase[] = [
 
   {
     id: 15,
+    diagrams: ['counter'],
     module: 4,
     title: 'Tempo, vidas e o modificador once',
     difficulty: 'dificil',
@@ -563,6 +566,7 @@ export const module4: Phase[] = [
 
   {
     id: 16,
+    diagrams: ['debug'],
     module: 4,
     title: 'Testando e depurando: caça aos bugs',
     difficulty: 'dificil',

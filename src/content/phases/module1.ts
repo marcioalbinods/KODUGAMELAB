@@ -7,6 +7,7 @@ const TOOLBAR =
 export const module1: Phase[] = [
   {
     id: 1,
+    diagrams: ['toolbar'],
     module: 1,
     title: 'Conhecendo o Kodu Game Lab',
     difficulty: 'facil',
@@ -210,6 +211,7 @@ export const module1: Phase[] = [
 
   {
     id: 2,
+    diagrams: ['mouse', 'toolbar'],
     module: 1,
     title: 'Explorando o ambiente: câmera e terreno',
     difficulty: 'facil',
@@ -550,6 +552,7 @@ export const module1: Phase[] = [
 
   {
     id: 4,
+    diagrams: ['rule-anatomy'],
     module: 1,
     title: 'Programando o primeiro movimento',
     difficulty: 'facil',

@@ -4,6 +4,7 @@ import { T, ALWAYS, text } from '../tiles';
 export const module2: Phase[] = [
   {
     id: 5,
+    diagrams: ['rule-anatomy'],
     module: 2,
     title: 'A estrutura WHEN/DO e a ordem das regras',
     difficulty: 'facil',

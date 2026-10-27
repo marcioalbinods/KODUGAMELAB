@@ -176,6 +176,7 @@ export const module5: Phase[] = [
 
   {
     id: 18,
+    diagrams: ['iteration'],
     module: 5,
     title: 'Projeto autoral: planejamento e protótipo',
     difficulty: 'dificil',
@@ -335,6 +336,7 @@ export const module5: Phase[] = [
 
   {
     id: 19,
+    diagrams: ['iteration'],
     module: 5,
     title: 'Finalizar, testar com jogadores e aprimorar',
     difficulty: 'dificil',
