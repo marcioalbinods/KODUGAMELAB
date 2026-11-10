@@ -23,7 +23,8 @@ export function TrailPage() {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const resume = resumePhaseId(progress);
+  const free = Boolean(student?.freeMode);
+  const resume = resumePhaseId(progress, free);
   const done = completedCount(progress);
   return (
     <>
@@ -42,9 +43,17 @@ export function TrailPage() {
             <Link className="btn btn-ok" to="/conquistas">Trilha concluída! Ver conquistas</Link>
           )}
         </div>
-        <p className="small muted" style={{ marginBottom: 0 }}>
-          {student?.displayName} · Turma {student?.className}. Todas as fases aparecem aqui; as bloqueadas mostram o que falta para liberar.
-        </p>
+        {free ? (
+          <p className="alert alert-info" style={{ marginBottom: 0 }}>
+            <strong>Trilha livre:</strong> todas as fases estão liberadas. Você pode começar por qualquer uma — os critérios para concluir cada
+            fase continuam os mesmos. Dica: se a fase usar algo de uma fase anterior (como o mundo “Ilha”), consulte a fase indicada em
+            “Pré-requisitos”.
+          </p>
+        ) : (
+          <p className="small muted" style={{ marginBottom: 0 }}>
+            {student?.displayName} · Turma {student?.className}. Todas as fases aparecem aqui; as bloqueadas mostram o que falta para liberar.
+          </p>
+        )}
       </div>
 
       {MODULES.map((m) => (
@@ -58,7 +67,7 @@ export function TrailPage() {
           <p className="muted" style={{ margin: '4px 0 0' }}>{m.description}</p>
           <div className="phase-grid">
             {PHASES.filter((p) => p.module === m.id).map((p) => {
-              const st = phaseState(p.id, progress);
+              const st = phaseState(p.id, progress, free);
               const pct = missionPercent(p, progress[p.id]);
               const inner = (
                 <>

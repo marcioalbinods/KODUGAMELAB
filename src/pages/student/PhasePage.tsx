@@ -44,11 +44,12 @@ function Section({ id, title, children }: { id: string; title: string; children:
 export function PhasePage() {
   const { id } = useParams();
   const phase = getPhase(Number(id));
-  const { progress } = useApp();
+  const { progress, student } = useApp();
+  const free = Boolean(student?.freeMode);
   if (!phase) return <NotFoundPage />;
   const mod = MODULES.find((m) => m.id === phase.module)!;
   const p = progress[phase.id];
-  const unlocked = isUnlocked(phase.id, progress);
+  const unlocked = isUnlocked(phase.id, progress, free);
   const completed = p?.status === 'completed';
   const prev = PHASES.find((x) => x.id === phase.id - 1);
   const next = PHASES.find((x) => x.id === phase.id + 1);
@@ -259,7 +260,7 @@ export function PhasePage() {
             {prev ? <Link className="btn btn-ghost" to={`/fase/${prev.id}`}>← Fase {prev.id}</Link> : <span />}
             <span className="spacer" />
             {next &&
-              (completed || isUnlocked(next.id, progress) ? (
+              (completed || isUnlocked(next.id, progress, free) ? (
                 <Link className="btn" to={`/fase/${next.id}`}>Fase {next.id} →</Link>
               ) : (
                 <span className="small muted">Conclua esta missão para liberar a fase {next.id}.</span>

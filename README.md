@@ -3,7 +3,7 @@
 Plataforma web para alunos do Ensino Fundamental aprenderem **Kodu Game Lab** de forma autônoma, em **20 fases** (5 módulos × 4 fases), do primeiro mundo até um jogo autoral completo — com **painel do professor** para acompanhar cada aluno.
 
 - **Aluno:** entra com um código individual (sem e-mail), segue missões com passo a passo detalhado, checklist com salvamento automático, 3 níveis de dica, “Se não funcionar”, teste corrigido no servidor, reflexão e revisão. A próxima fase só abre quando os critérios são cumpridos.
-- **Professor:** turmas, cadastro de alunos e códigos, visão geral, acompanhamento com filtros, mapa de fases, relatório individual (checklists, respostas, tentativas, dicas, reflexões, histórico), liberação manual de fases com registro de motivo, exportação CSV.
+- **Professor:** **trilha livre** por turma (libera as 20 fases de uma vez, mantendo os critérios de conclusão), turmas, cadastro de alunos e códigos, visão geral, acompanhamento com filtros, mapa de fases, relatório individual (checklists, respostas, tentativas, dicas, reflexões, histórico), liberação manual de fases com registro de motivo, exportação CSV.
 
 > **Situação atual:** o código está completo e testado. O uso real em sala depende de criar o projeto Supabase e publicar o site (passos abaixo, seção 3). Enquanto o Supabase não estiver configurado, o site funciona em **modo demonstração**, claramente sinalizado, com dados apenas no navegador.
 
@@ -66,6 +66,9 @@ docs/                 guias rápidos do professor e do aluno
 6. **Project Settings → API** (ou *Data API*): copie a **Project URL** e a chave **anon / publishable**.
    ⚠️ Nunca use a chave `service_role`/`secret` no site.
 7. (Recomendado) **Authentication → Attack Protection:** ative CAPTCHA se notar abuso; revise os limites de *Rate Limits* para login anônimo (a escola inteira pode compartilhar o mesmo IP — aumente o limite de anônimos por hora se muitos alunos entrarem ao mesmo tempo).
+
+### 3.1.1 Atualizações do banco
+Projetos criados antes de 10/11/2026 precisam executar também `supabase/migrations/20261110000005_trilha_livre.sql` no SQL Editor (adiciona a trilha livre). Projetos novos já recebem tudo pelo `setup-completo.sql`.
 
 ### 3.2 Publicar no GitHub Pages
 1. Crie um repositório (sugestão: `kodu-academy`) e envie este projeto:

@@ -193,6 +193,39 @@ select t.ok((public.student_login((select code from t.codes where who = 's2')) -
   'após 8 erros, mesmo o código certo é bloqueado temporariamente');
 reset role;
 
+-- ================= Trilha livre =================
+set role authenticated;
+select set_config('request.jwt.claim.sub', 'b0000000-0000-0000-0000-00000000000b', false);
+select t.throws(format($$select public.teacher_set_free_mode(%L, true)$$, (select class_a from ids)), 'class_not_found', 'professor B não liga a trilha livre da turma do A');
+reset role;
+set role authenticated;
+select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-000000000003', false);
+select t.throws($$select public.save_checklist(10, array['dez'])$$, 'phase_locked', 'sem trilha livre, a fase 10 está bloqueada');
+update public.classes set free_mode = true;
+select t.throws($$select public.teacher_set_free_mode((select class_id from public.students limit 1), true)$$, 'not_teacher', 'aluno não liga a trilha livre');
+select t.ok((public.student_me() ->> 'free_mode')::boolean = false, 'aluno não consegue alterar a turma diretamente');
+reset role;
+set role authenticated;
+select set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-00000000000a', false);
+select public.teacher_set_free_mode((select class_a from ids), true);
+select t.ok((select count(*) from public.audit_log where action = 'free_mode_on') = 1, 'trilha livre registrada no histórico');
+reset role;
+set role authenticated;
+select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-000000000003', false);
+select t.ok((public.student_me() ->> 'free_mode')::boolean, 'aluno vê que a turma está em trilha livre');
+select t.ok((public.save_checklist(10, array['dez']) ->> 'phase_id')::int = 10, 'com trilha livre, o aluno abre a fase 10');
+select t.ok((public.save_checklist(20, array['roteiro']) ->> 'phase_id')::int = 20, 'com trilha livre, o aluno abre a fase 20');
+select t.ok((public.complete_phase(10) ->> 'ok')::boolean = false, 'trilha livre não dispensa os critérios de conclusão');
+reset role;
+set role authenticated;
+select set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-00000000000a', false);
+select public.teacher_set_free_mode((select class_a from ids), false);
+reset role;
+set role authenticated;
+select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-000000000003', false);
+select t.throws($$select public.save_checklist(11, array['dez'])$$, 'phase_locked', 'ao desligar a trilha livre, as fases voltam a bloquear');
+reset role;
+
 -- ================= Desativar e excluir =================
 set role authenticated;
 select set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-00000000000a', false);

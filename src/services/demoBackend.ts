@@ -134,7 +134,9 @@ function currentStudent(db: DemoDb): DemoStudent {
 /** Equivalente a private.open_phase. */
 function openPhase(db: DemoDb, studentId: string, phaseId: number): ProgressRow {
   if (!getPhase(phaseId)) fail('invalid_phase');
-  if (!isUnlocked(phaseId, progressMapOf(db, studentId))) fail('phase_locked');
+  const st0 = db.students.find((s) => s.id === studentId);
+  const free = Boolean(db.classes.find((c) => c.id === st0?.classId)?.freeMode);
+  if (!isUnlocked(phaseId, progressMapOf(db, studentId), free)) fail('phase_locked');
   let row = db.progress.find((p) => p.studentId === studentId && p.phaseId === phaseId);
   if (!row) {
     row = { ...emptyProgress(phaseId), studentId, startedAt: now(), updatedAt: now() };
@@ -157,7 +159,7 @@ function makeStudentApi(): StudentApi {
       const s = db.students.find((x) => x.id === db.session.studentId && x.active);
       if (!s) return null;
       const c = db.classes.find((x) => x.id === s.classId);
-      return { id: s.id, displayName: s.displayName, classId: s.classId, className: c?.name ?? '', startedAt: s.startedAt };
+      return { id: s.id, displayName: s.displayName, classId: s.classId, className: c?.name ?? '', startedAt: s.startedAt, freeMode: Boolean(c?.freeMode) };
     },
     async login(code) {
       const hash = await sha256(normalize(code));
@@ -178,7 +180,7 @@ function makeStudentApi(): StudentApi {
         db.session.studentId = st.id;
         db.activity.unshift({ id: db.seq++, studentId: st.id, phaseId: null, kind: 'login', detail: {}, createdAt: now() });
         const c = db.classes.find((x) => x.id === st.classId);
-        return { id: st.id, displayName: st.displayName, classId: st.classId, className: c?.name ?? '', startedAt: st.startedAt };
+        return { id: st.id, displayName: st.displayName, classId: st.classId, className: c?.name ?? '', startedAt: st.startedAt, freeMode: Boolean(c?.freeMode) };
       });
     },
     async logout() {
@@ -357,7 +359,7 @@ function makeTeacherApi(): TeacherApi {
         const n = name.trim();
         if (!n || n.length > 60) fail('invalid_name');
         if (db.classes.some((c) => c.name === n)) fail('duplicate_class');
-        db.classes.push({ id: uuid(), name: n, schoolYear: schoolYear?.trim() || null, archived: false, createdAt: now() });
+        db.classes.push({ id: uuid(), name: n, schoolYear: schoolYear?.trim() || null, archived: false, freeMode: false, createdAt: now() });
       });
     },
     async updateClass(id, patch) {
@@ -373,6 +375,15 @@ function makeTeacherApi(): TeacherApi {
         }
         if (patch.schoolYear !== undefined) c.schoolYear = patch.schoolYear;
         if (patch.archived !== undefined) c.archived = patch.archived;
+      });
+    },
+    async setFreeMode(classId, enabled) {
+      tx((db) => {
+        requireTeacher(db);
+        const c = db.classes.find((x) => x.id === classId);
+        if (!c) return fail('class_not_found');
+        c.freeMode = enabled;
+        audit(db, { studentId: null, classId, phaseId: null, action: enabled ? 'free_mode_on' : 'free_mode_off', reason: null, before: null, after: { free_mode: enabled } });
       });
     },
     async deleteClass(id, confirmName) {

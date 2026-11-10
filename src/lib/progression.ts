@@ -51,18 +51,18 @@ export function emptyProgress(phaseId: number): PhaseProgress {
   };
 }
 
-/** Mesma regra de private.phase_unlocked no banco. */
-export function isUnlocked(phaseId: number, progress: ProgressMap): boolean {
-  if (phaseId === 1) return true;
+/** Mesma regra de private.phase_unlocked no banco. freeMode = turma em "trilha livre". */
+export function isUnlocked(phaseId: number, progress: ProgressMap, freeMode = false): boolean {
+  if (phaseId === 1 || freeMode) return true;
   if (progress[phaseId - 1]?.status === 'completed') return true;
   const own = progress[phaseId];
   return Boolean(own && (own.manuallyUnlocked || own.status === 'completed'));
 }
 
-export function phaseState(phaseId: number, progress: ProgressMap): PhaseState {
+export function phaseState(phaseId: number, progress: ProgressMap, freeMode = false): PhaseState {
   const p = progress[phaseId];
   if (p?.status === 'completed') return 'completed';
-  if (!isUnlocked(phaseId, progress)) return 'locked';
+  if (!isUnlocked(phaseId, progress, freeMode)) return 'locked';
   if (p && (p.checklist.length > 0 || p.quizAttempts > 0 || p.reflection || p.reviewed)) return 'in_progress';
   return 'available';
 }
@@ -101,14 +101,21 @@ export function trailPercent(progress: ProgressMap, total = PHASES.length): numb
 }
 
 /** Fase para "continuar de onde parou": a primeira liberada e não concluída. */
-export function resumePhaseId(progress: ProgressMap): number | null {
-  const next = PHASES.find((ph) => isUnlocked(ph.id, progress) && progress[ph.id]?.status !== 'completed');
+export function resumePhaseId(progress: ProgressMap, freeMode = false): number | null {
+  if (freeMode) {
+    // Na trilha livre, volta para a última fase em que o aluno mexeu e ainda não concluiu.
+    const recent = Object.values(progress)
+      .filter((p) => p.status !== 'completed' && p.updatedAt)
+      .sort((a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''))[0];
+    if (recent) return recent.phaseId;
+  }
+  const next = PHASES.find((ph) => isUnlocked(ph.id, progress, freeMode) && progress[ph.id]?.status !== 'completed');
   return next ? next.id : null;
 }
 
 /** Fase "atual" para relatórios: a de maior número liberada e não concluída. */
-export function currentPhaseId(progress: ProgressMap): number {
-  const resume = resumePhaseId(progress);
+export function currentPhaseId(progress: ProgressMap, freeMode = false): number {
+  const resume = resumePhaseId(progress, freeMode);
   return resume ?? PHASES.length;
 }
 

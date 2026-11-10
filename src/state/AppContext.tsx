@@ -64,7 +64,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const reloadProgress = useCallback(async () => {
     if (!backend) return;
-    setProgress(await backend.student.loadProgress());
+    const [p, profile] = await Promise.all([backend.student.loadProgress(), backend.student.restore().catch(() => undefined)]);
+    setProgress(p);
+    if (profile) setStudent(profile);
   }, [backend]);
 
   const updateProgress = useCallback((p: PhaseProgress) => {

@@ -4,6 +4,8 @@ const LABELS: Record<string, string> = {
   update_student: 'Cadastro do aluno alterado',
   delete_student: 'Aluno excluído',
   delete_class: 'Turma excluída',
+  free_mode_on: 'Trilha livre ligada (todas as fases liberadas)',
+  free_mode_off: 'Trilha livre desligada (ordem das fases)',
   unlock_phase: 'Fase liberada manualmente',
   'set_status:completed': 'Fase marcada como concluída',
   'set_status:in_progress': 'Fase reaberta',

@@ -5,9 +5,9 @@ import { useApp } from '../../state/AppContext';
 import { isUnlocked } from '../../lib/progression';
 
 export function GlossaryPage() {
-  const { progress } = useApp();
+  const { progress, student } = useApp();
   const [q, setQ] = useState('');
-  const maxUnlocked = Math.max(...PHASES.filter((p) => isUnlocked(p.id, progress)).map((p) => p.id));
+  const maxUnlocked = Math.max(...PHASES.filter((p) => isUnlocked(p.id, progress, Boolean(student?.freeMode))).map((p) => p.id));
   const terms = [...GLOSSARY].sort((a, b) => a.phase - b.phase);
   const filtered = terms.filter((t) => (t.term + ' ' + t.definition).toLowerCase().includes(q.toLowerCase()));
   return (

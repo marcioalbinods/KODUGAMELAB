@@ -7,6 +7,7 @@ import { ErrorAlert, Modal, useToast } from '../../components/Feedback';
 import { toAppError } from '../../services/errors';
 import { downloadText, toCsv } from '../../lib/csv';
 import type { CreatedStudent, StudentRow } from '../../services/types';
+import { FreeModeCard } from './FreeModeCard';
 
 type Dialog =
   | { kind: 'codes'; title: string; codes: CreatedStudent[]; className: string }
@@ -92,6 +93,7 @@ export function ManagePage() {
   return (
     <>
       <ErrorAlert message={error} />
+      <FreeModeCard />
       <div className="grid grid-2">
         <section className="card" aria-labelledby="nova-turma">
           <h2 id="nova-turma">Nova turma</h2>

@@ -9,6 +9,8 @@ export interface StudentProfile {
   classId: string;
   className: string;
   startedAt: string | null;
+  /** Turma em "trilha livre": todas as fases liberadas. */
+  freeMode: boolean;
 }
 
 export interface TeacherProfile {
@@ -22,6 +24,7 @@ export interface ClassRow {
   name: string;
   schoolYear: string | null;
   archived: boolean;
+  freeMode: boolean;
   createdAt: string;
 }
 
@@ -113,6 +116,7 @@ export interface TeacherApi {
   loadData(): Promise<TeacherData>;
   createClass(name: string, schoolYear: string | null): Promise<void>;
   updateClass(id: string, patch: { name?: string; schoolYear?: string | null; archived?: boolean }): Promise<void>;
+  setFreeMode(classId: string, enabled: boolean): Promise<void>;
   deleteClass(id: string, confirmName: string): Promise<void>;
   createStudents(classId: string, names: string[]): Promise<CreatedStudent[]>;
   resetCode(studentId: string): Promise<string>;

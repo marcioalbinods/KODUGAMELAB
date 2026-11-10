@@ -29,6 +29,7 @@ export const mapProfile = (r: Raw): StudentProfile => ({
   classId: r.class_id,
   className: r.class_name,
   startedAt: r.started_at ?? null,
+  freeMode: Boolean(r.free_mode),
 });
 
 export const mapClass = (r: Raw): ClassRow => ({
@@ -36,6 +37,7 @@ export const mapClass = (r: Raw): ClassRow => ({
   name: r.name,
   schoolYear: r.school_year ?? null,
   archived: Boolean(r.archived),
+  freeMode: Boolean(r.free_mode),
   createdAt: r.created_at,
 });
 

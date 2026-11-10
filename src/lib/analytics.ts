@@ -62,9 +62,10 @@ export function summarizeStudent(
   attempts: AttemptRow[],
   className: string,
   now: Date,
+  freeMode = false,
 ): StudentSummary {
   const mine = attempts.filter((a) => a.studentId === student.id);
-  const current = currentPhaseId(progress);
+  const current = currentPhaseId(progress, freeMode);
   const completed = completedCount(progress);
   const lastProgressAt = maxDate(
     student.lastActivityAt,
@@ -106,8 +107,9 @@ export function summarizeStudent(
 export function summarizeAll(data: TeacherData, now = new Date()): StudentSummary[] {
   const byStudent = groupProgress(data.progress);
   const className = new Map(data.classes.map((c) => [c.id, c.name]));
+  const free = new Set(data.classes.filter((c) => c.freeMode).map((c) => c.id));
   return data.students
-    .map((s) => summarizeStudent(s, byStudent.get(s.id) ?? {}, data.attempts, className.get(s.classId) ?? '—', now))
+    .map((s) => summarizeStudent(s, byStudent.get(s.id) ?? {}, data.attempts, className.get(s.classId) ?? '—', now, free.has(s.classId)))
     .sort((a, b) => a.className.localeCompare(b.className, 'pt-BR') || a.student.displayName.localeCompare(b.student.displayName, 'pt-BR'));
 }
 

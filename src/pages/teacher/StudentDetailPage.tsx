@@ -46,7 +46,8 @@ export function StudentDetailPage() {
     );
   }
   const className = classNameOf(data.classes, student.classId);
-  const summary = summarizeStudent(student, progress, data.attempts, className, new Date());
+  const free = Boolean(data.classes.find((c) => c.id === student.classId)?.freeMode);
+  const summary = summarizeStudent(student, progress, data.attempts, className, new Date(), free);
   const wrongQuestions = questionStats(attempts, 1).filter((q) => q.wrong > 0).slice(0, 8);
 
   async function doAction() {
@@ -132,7 +133,7 @@ export function StudentDetailPage() {
             <tbody>
               {PHASES.map((ph) => {
                 const p = progress[ph.id];
-                const st = phaseState(ph.id, progress);
+                const st = phaseState(ph.id, progress, free);
                 const req = requiredChecklistIds(ph);
                 const done = p ? req.filter((x) => p.checklist.includes(x)).length : 0;
                 const tries = attempts.filter((a) => a.phaseId === ph.id).length;
@@ -155,7 +156,7 @@ export function StudentDetailPage() {
                       <td>{p?.completedAt ? new Date(p.completedAt).toLocaleDateString('pt-BR') : '—'}</td>
                       <td className="no-print">
                         <div className="row" style={{ gap: 4 }}>
-                          {!isUnlocked(ph.id, progress) && (
+                          {!isUnlocked(ph.id, progress, free) && (
                             <button type="button" className="btn btn-sm btn-secondary" onClick={() => setAction({ kind: 'unlock', phaseId: ph.id })}>Liberar</button>
                           )}
                           {st !== 'completed' && (

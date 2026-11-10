@@ -106,3 +106,27 @@ describe('painel do professor', () => {
     expect(screen.getByText(/Ainda não há alunos com progresso registrado/)).toBeInTheDocument();
   });
 });
+
+describe('trilha livre', () => {
+  it('o professor liga a trilha livre e o aluno passa a ver as 20 fases liberadas', async () => {
+    const [ana] = await seedClass(['Ana']);
+    await createDemoBackend().teacher.signIn('prof@escola.br', 'senha-segura');
+    const user = userEvent.setup();
+    const view = renderApp('/professor');
+    const sw = await screen.findByRole('switch', { name: /7º A/ });
+    expect(sw).not.toBeChecked();
+    await user.click(sw);
+    await waitFor(() => expect(screen.getByRole('switch', { name: /7º A/ })).toBeChecked());
+    expect(screen.getByText('Todas as fases liberadas')).toBeInTheDocument();
+    view.unmount();
+
+    const b = createDemoBackend();
+    await b.teacher.signOut();
+    await b.student.login(ana.code);
+    renderApp('/trilha');
+    expect(await screen.findByText(/Trilha livre:/)).toBeInTheDocument();
+    expect(screen.queryAllByText(/🔒 Bloqueada/)).toHaveLength(0);
+    expect(screen.getAllByText('Disponível')).toHaveLength(20);
+    expect((await b.student.saveChecklist(17, ['copia'])).phaseId).toBe(17);
+  });
+});

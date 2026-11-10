@@ -70,3 +70,19 @@ describe('regras de progressão', () => {
     expect(resumePhaseId(m)).toBe(6);
   });
 });
+
+describe('trilha livre', () => {
+  it('libera todas as fases sem dispensar os critérios', () => {
+    for (let i = 1; i <= 20; i++) expect(isUnlocked(i, {}, true)).toBe(true);
+    expect(phaseState(15, {}, true)).toBe('available');
+    expect(missingCriteria(PHASES[14], undefined)).toHaveLength(4);
+  });
+  it('"continuar" volta para a última fase mexida e não concluída', () => {
+    const m: ProgressMap = {
+      3: { ...emptyProgress(3), checklist: ['x'], updatedAt: '2026-11-01T10:00:00Z' },
+      12: { ...emptyProgress(12), checklist: ['y'], updatedAt: '2026-11-05T10:00:00Z' },
+    };
+    expect(resumePhaseId(m, true)).toBe(12);
+    expect(resumePhaseId({}, true)).toBe(1);
+  });
+});

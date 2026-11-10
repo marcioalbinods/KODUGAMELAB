@@ -5,6 +5,7 @@ import { ClassFilter } from './ClassFilter';
 import { useClassFilter } from './useClassFilter';
 import { filterTeacherData, INACTIVE_DAYS, overview, phaseStats, questionStats, daysSince } from '../../lib/analytics';
 import { PHASES } from '../../content/phases';
+import { FreeModeCard } from './FreeModeCard';
 
 const pct = (v: number | null) => (v === null ? '—' : `${Math.round(v * 100)}%`);
 
@@ -32,6 +33,7 @@ export function OverviewPage() {
 
   return (
     <>
+      <FreeModeCard />
       <div className="filters" style={{ maxWidth: 360 }}>
         <ClassFilter classes={data.classes} value={classId} onChange={setClassId} />
       </div>

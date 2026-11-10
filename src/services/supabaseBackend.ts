@@ -118,7 +118,7 @@ function makeTeacherApi(db: SupabaseClient): TeacherApi {
     },
     async loadData() {
       const [classes, students, progress, attempts, activity, audit] = await Promise.all([
-        fetchAll((a, b) => db.from('classes').select('id, name, school_year, archived, created_at').order('name').range(a, b)),
+        fetchAll((a, b) => db.from('classes').select('id, name, school_year, archived, free_mode, created_at').order('name').range(a, b)),
         fetchAll((a, b) => db.from('students').select(STUDENT_COLS).order('display_name').range(a, b)),
         fetchAll((a, b) => db.from('phase_progress').select(PROGRESS_COLS).order('student_id').order('phase_id').range(a, b)),
         fetchAll((a, b) =>
@@ -149,6 +149,9 @@ function makeTeacherApi(db: SupabaseClient): TeacherApi {
       if (patch.schoolYear !== undefined) body.school_year = patch.schoolYear;
       if (patch.archived !== undefined) body.archived = patch.archived;
       await run(db.from('classes').update(body).eq('id', id));
+    },
+    async setFreeMode(classId, enabled) {
+      await run(db.rpc('teacher_set_free_mode', { p_class: classId, p_enabled: enabled }));
     },
     async deleteClass(id, confirmName) {
       await run(db.rpc('teacher_delete_class', { p_class: id, p_confirm_name: confirmName }));

@@ -8,7 +8,8 @@ import { Logo } from '../components/Logo';
 
 export function HomePage() {
   const { student, progress, teacher } = useApp();
-  const resume = student ? resumePhaseId(progress) : null;
+  const free = Boolean(student?.freeMode);
+  const resume = student ? resumePhaseId(progress, free) : null;
   return (
     <>
       <section className="hero" aria-labelledby="titulo-inicio">
@@ -44,6 +45,12 @@ export function HomePage() {
         <section className="card" style={{ marginTop: 24 }} aria-labelledby="meu-progresso">
           <h2 id="meu-progresso">Olá, {student.displayName}!</h2>
           <ProgressBar value={trailPercent(progress)} label="Progresso na trilha" />
+          {free && (
+            <div className="alert alert-info" style={{ marginBottom: 0 }}>
+              <strong>Trilha livre:</strong> seu professor liberou todas as fases. Escolha a missão que mais interessa a você.{' '}
+              <Link to="/trilha">Ver todas as fases →</Link>
+            </div>
+          )}
           <p className="muted small" style={{ marginTop: 8 }}>Turma: {student.className}</p>
         </section>
       )}

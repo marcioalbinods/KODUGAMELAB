@@ -113,7 +113,7 @@ export function ClassTrackingPage() {
                   <td>
                     <div className="heat" aria-label={`${s.completed} fases concluídas`}>
                       {PHASES.map((p) => {
-                        const st = phaseState(p.id, s.progress);
+                        const st = phaseState(p.id, s.progress, Boolean(data.classes.find((c) => c.id === s.student.classId)?.freeMode));
                         const cls = st === 'completed' ? 'c' : st === 'in_progress' ? 'p' : st === 'available' ? 'u' : '';
                         return <span key={p.id} className={cls} title={`Fase ${p.id}: ${st}`} />;
                       })}

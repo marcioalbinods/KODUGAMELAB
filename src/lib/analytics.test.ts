@@ -18,7 +18,7 @@ const attempt = (studentId: string, phaseId: number, passed: boolean, createdAt 
 
 function dataset(): TeacherData {
   return {
-    classes: [{ id: 'c1', name: '7º A', schoolYear: '2026', archived: false, createdAt: daysAgo(40) }],
+    classes: [{ id: 'c1', name: '7º A', schoolYear: '2026', archived: false, freeMode: false, createdAt: daysAgo(40) }],
     students: [
       student('s1', 'Ana'),
       student('s2', 'Bruno', { lastActivityAt: daysAgo(12) }),
